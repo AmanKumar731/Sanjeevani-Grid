@@ -11,7 +11,6 @@ import httpx
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-
 from app.core.queue_manager import sort_patient_queue
 from app.core.routing import find_best_hospital
 from app.core.triage_logic import rule_based_explainable_inference
@@ -23,6 +22,7 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")
 CORS_ORIGINS = [origin.strip() for origin in os.getenv("CORS_ORIGINS", FRONTEND_ORIGIN).split(",") if origin.strip()]
 
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 # ==========================================
 # WEBSOCKET MANAGER (Real-Time Comm Link)
