@@ -56,7 +56,7 @@ export function AuraAssistant() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.97 }}
             transition={{ type: "spring", stiffness: 320, damping: 28 }}
-            className="w-[320px] rounded-2xl border border-border bg-card/95 backdrop-blur-xl shadow-card overflow-hidden"
+            className="w-[420px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border bg-card/95 backdrop-blur-xl shadow-card overflow-hidden"
           >
             <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-secondary/50">
               <div className="flex items-center gap-2">
@@ -84,11 +84,11 @@ export function AuraAssistant() {
                 </button>
               </div>
             </div>
-            <div className="h-56 overflow-y-auto p-3 space-y-2">
+            <div className="h-[420px] max-h-[65vh] overflow-y-auto p-4 space-y-3">
               {messages.map((m, i) => (
                 <div
                   key={i}
-                  className={`max-w-[85%] rounded-lg px-3 py-1.5 text-[13px] leading-snug ${
+                  className={`max-w-[90%] rounded-xl px-3.5 py-2 text-[13px] leading-relaxed ${
                     m.role === "user"
                       ? "ml-auto bg-arctic text-white"
                       : "bg-secondary text-foreground"

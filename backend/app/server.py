@@ -1,7 +1,6 @@
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
-from typing import List, Dict
-
+from typing import Dict, List, Optional
 import asyncio
 import json
 import os
@@ -9,6 +8,7 @@ import random
 import uuid
 
 import httpx
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -19,7 +19,7 @@ from app.models.schemas import ChatRequest, Hospital, Patient, PatientCreate
 
 load_dotenv()
 
-OPENROUTE_API_KEY = os.getenv("OPENROUTE_API_KEY")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")
 CORS_ORIGINS = [origin.strip() for origin in os.getenv("CORS_ORIGINS", FRONTEND_ORIGIN).split(",") if origin.strip()]
 
@@ -40,13 +40,13 @@ class ConnectionManager:
             self.active_connections.remove(websocket)
 
     async def broadcast(self, message: dict):
-        """Pushes JSON state updates to all connected frontend dashboards."""
-        payload = json.dumps(message, default=str)  
+        """Push JSON state updates to connected frontend dashboards."""
+        payload = json.dumps(message, default=str)
         for connection in list(self.active_connections):
             try:
                 await connection.send_text(payload)
             except Exception:
-                self.disconnect
+                self.disconnect(connection)
 
 
 manager = ConnectionManager()
@@ -57,85 +57,85 @@ manager = ConnectionManager()
 # ==========================================
 db_hospitals: Dict[str, Hospital] = {
     "H-1": Hospital(
-        id="H-1", 
+        id="H-1",
         name="Chris Hani Baragwanath Academic Hospital",
-        kind="Public", 
-        location_x=8.0, 
+        kind="public",
+        location_x=8.0,
         location_y=18.0,
         lat=-26.2614,
-        lng=27.9389, 
-        total_beds=32, 
+        lng=27.9389,
+        total_beds=32,
         available_beds=32,
-        ),
+    ),
     "H-2": Hospital(
-        id="H-2", 
+        id="H-2",
         name="Charlotte Maxeke Johannesburg Academic Hospital",
-        kind="Public", 
-        location_x=18.0, 
+        kind="public",
+        location_x=18.0,
         location_y=32.0,
         lat=-26.1773,
-        lng=28.0451, 
-        total_beds=26, 
+        lng=28.0451,
+        total_beds=26,
         available_beds=26,
-        ),
+    ),
     "H-3": Hospital(
-        id="H-3", 
+        id="H-3",
         name="Helen Joseph Hospital",
-        kind="Public", 
-        location_x=15.0, 
+        kind="public",
+        location_x=15.0,
         location_y=29.0,
         lat=-26.1745,
-        lng=28.0107, 
-        total_beds=20, 
+        lng=28.0107,
+        total_beds=20,
         available_beds=20,
-        ),
+    ),
     "H-4": Hospital(
-        id="H-4", 
+        id="H-4",
         name="Rahima Moosa Mother and Child Hospital",
-        kind="Public", 
-        location_x=14.0, 
+        kind="public",
+        location_x=14.0,
         location_y=27.0,
         lat=-26.1791,
-        lng=27.9942, 
-        total_beds=18, 
+        lng=27.9942,
+        total_beds=18,
         available_beds=18,
-        ),
+    ),
     "H-5": Hospital(
-        id="H-5", 
+        id="H-5",
         name="Netcare Milpark Hospital",
-        kind="Private", 
-        location_x=16.0, 
+        kind="private",
+        location_x=16.0,
         location_y=30.0,
         lat=-26.1820,
-        lng=28.0241, 
-        total_beds=16, 
+        lng=28.0241,
+        total_beds=16,
         available_beds=16,
-        ),
+    ),
     "H-6": Hospital(
-        id="H-6", 
-        name="Mediclinic Morningside Hospital",
-        kind="Private", 
-        location_x=24.0, 
+        id="H-6",
+        name="Mediclinic Morningside",
+        kind="private",
+        location_x=24.0,
         location_y=42.0,
         lat=-26.0726,
-        lng=28.0561, 
-        total_beds=16, 
+        lng=28.0561,
+        total_beds=16,
         available_beds=16,
-        ),
+    ),
 }
 
 db_patients: Dict[str, Patient] = {}
 hospital_queues: Dict[str, List[Patient]] = {hospital_id: [] for hospital_id in db_hospitals}
 
 DEMO_PATIENTS = [
-    {"name": "T Mokoena", "age": 58, "primary_symptom": "severe chest pain and sweating"},
-    {"name": "L Dlamini", "age": 34, "primary_symptom": "laceration with bleeding"},
-    {"name": "S Naidoo", "age": 72, "primary_symptom": "slurred speech and numbness"},
-    {"name": "R Patel", "age": 5, "primary_symptom": "wheezing and difficulty breathing"},
-    {"name": "M van Rooyen", "age": 29, "primary_symptom": "broken arm after fall"},
-    {"name": "A Mthembu", "age": 41, "primary_symptom": "mild cough and fever"},
-    {"name": "K Singh", "age": 63, "primary_symptom": "head injury after car accident"},
-    {"name": "E Nkosi", "age": 26, "primary_symptom": "vomiting and dehydration"},       
+    {"name": "A. Morales", "age": 58, "primary_symptom": "severe chest pain and sweating"},
+    {"name": "K. Tanaka", "age": 34, "primary_symptom": "laceration with bleeding"},
+    {"name": "J. Park", "age": 72, "primary_symptom": "slurred speech and numbness"},
+    {"name": "S. Okafor", "age": 5, "primary_symptom": "wheezing and difficulty breathing"},
+    {"name": "L. Romano", "age": 29, "primary_symptom": "broken arm after fall"},
+    {"name": "E. Singh", "age": 41, "primary_symptom": "mild cough and fever"},
+    {"name": "M. Dubois", "age": 63, "primary_symptom": "head injury after collision"},
+    {"name": "R. Hassan", "age": 26, "primary_symptom": "vomiting and dehydration"},
 ]
 
 
@@ -150,13 +150,13 @@ def _random_jhb_pickup() -> dict:
 
 def _grid_state() -> dict:
     queues = {
-        hospital_id: [patient.model_dump(mode='json') for patient in sort_patient_queue(queue)]
+        hospital_id: [patient.model_dump(mode="json") for patient in sort_patient_queue(queue)]
         for hospital_id, queue in hospital_queues.items()
     }
     return {
-        "hospitals": [hospital.model_dump(mode='json') for hospital in db_hospitals.values()],
+        "hospitals": [hospital.model_dump(mode="json") for hospital in db_hospitals.values()],
         "queues": queues,
-        "patients": [patient.model_dump(mode='json') for patient in db_patients.values()],
+        "patients": [patient.model_dump(mode="json") for patient in db_patients.values()],
         "generated_at": datetime.now(timezone.utc).isoformat(),
     }
 
@@ -347,7 +347,7 @@ async def chat_with_pulsegrid_ai(request: ChatRequest):
                 "https://openrouter.ai/api/v1/chat/completions",
                 headers=headers,
                 json={
-                    "model": os.getenv("OPENROUTER_MODEL", "anthropic/claude-3.5-sonnet"),
+                    "model": os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini"),
                     "messages": messages,
                 },
                 timeout=20.0,

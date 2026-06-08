@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 # --- PATIENT SCHEMAS ---
@@ -25,7 +25,7 @@ class Patient(PatientBase):
     triage_level: int = Field(..., ge=1, le=5)
     arrival_time: datetime
     current_priority: float = 0.0
-    status: str = "WAITING" # WAITING, EN_ROUTE, ADMITTED, DISCHARGED
+    status: str = "WAITING"  # WAITING, EN_ROUTE, TREATED, DISCHARGED
     assigned_hospital_id: Optional[str] = None
     pickup_lat: Optional[float] = None
     pickup_lng: Optional[float] = None
@@ -42,7 +42,7 @@ class Hospital(BaseModel):
     total_beds: int
     available_beds: int
     current_wait_time_mins: float = 0.0
-    active_queue_length: int = 0 
+    active_queue_length: int = 0
     kind: str = "public"
     lat: float
     lng: float
@@ -61,11 +61,11 @@ class Ambulance(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-# --- CHATBOT SCHEMA ---
+# --- CHATBOT SCHEMAS ---
 class ChatMessage(BaseModel):
     role: str
     content: str
 
+
 class ChatRequest(BaseModel):
     messages: list[ChatMessage]
-
