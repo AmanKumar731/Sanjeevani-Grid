@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Hospital } from "@/lib/mockData";
 
 function HospitalBlock({ h }: { h: Hospital }) {
-  const used = h.queue.length;
+  const used = h.capacity - (h.availableBeds ?? Math.max(0, h.capacity - h.queue.length));
   const pct = Math.min(100, Math.round((used / h.capacity) * 100));
   const atCap = pct >= 100;
 
@@ -11,9 +11,14 @@ function HospitalBlock({ h }: { h: Hospital }) {
       <div className="px-3 pt-3 pb-2">
         <div className="flex items-center justify-between">
           <h4 className="font-display font-semibold text-[13px]">{h.name}</h4>
-          <span className={`text-[10px] font-semibold uppercase tracking-wider ${atCap ? "text-[color:var(--urgent)]" : "text-muted-foreground"}`}>
-            {used}/{h.capacity}
+          <span
+            className={`text-[10px] font-semibold uppercase tracking-wider ${atCap ? "text-[color:var(--urgent)]" : "text-muted-foreground"}`}
+          >
+            {used}/{h.capacity} beds
           </span>
+        </div>
+        <div className="mt-1 text-[10px] text-muted-foreground uppercase tracking-wider">
+          {h.queue.length} waiting · {Math.round(h.waitTimeMins ?? h.queue.length * 5)} min ETA
         </div>
         <div className="mt-2 h-1.5 rounded-full bg-secondary overflow-hidden">
           <motion.div
@@ -38,6 +43,7 @@ function HospitalBlock({ h }: { h: Hospital }) {
             >
               <span className="text-xs truncate">{p.name}</span>
               <span className="text-[11px] font-semibold tabular-nums text-[color:var(--tech-blue-deep)]">
+                {p.triage ? `L${p.triage} · ` : ""}
                 {p.score}
               </span>
             </motion.li>

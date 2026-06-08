@@ -2,7 +2,15 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Fragment } from "react";
 import { motion } from "framer-motion";
 import { Reveal } from "@/components/Reveal";
-import { Radio, Cpu, MonitorPlay, ArrowRight, ArrowRightCircle, Layers, TrendingUp } from "lucide-react";
+import {
+  Radio,
+  Cpu,
+  MonitorPlay,
+  ArrowRight,
+  ArrowRightCircle,
+  Layers,
+  TrendingUp,
+} from "lucide-react";
 
 export const Route = createFileRoute("/architecture")({
   head: () => ({
@@ -35,15 +43,7 @@ const NODES = [
   },
 ];
 
-const STACK = [
-  "Python",
-  "FastAPI",
-  "React",
-  "Tailwind",
-  "Framer Motion",
-  "Leaflet",
-  "WebSockets",
-];
+const STACK = ["Python", "FastAPI", "React", "Tailwind", "Framer Motion", "Leaflet", "WebSockets"];
 
 function PipelineConnector() {
   return (
@@ -76,7 +76,9 @@ function Architecture() {
       {/* SECTION A — Pipeline */}
       <section className="mx-auto max-w-6xl px-6 pt-16 pb-10">
         <Reveal>
-          <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">System</div>
+          <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+            System
+          </div>
           <h1 className="mt-2 font-display text-4xl md:text-5xl font-semibold tracking-tight">
             The Real-Time Data Pipeline
           </h1>
@@ -109,7 +111,10 @@ function Architecture() {
       </section>
 
       {/* SECTION B — Routing Algorithm spotlight (centered, deep navy) */}
-      <section className="relative w-full bg-deep-navy overflow-hidden" style={{ color: "#FFFFFF" }}>
+      <section
+        className="relative w-full bg-deep-navy overflow-hidden"
+        style={{ color: "#FFFFFF" }}
+      >
         <div className="absolute inset-0 grid-bg-navy opacity-90" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,rgba(0,80,216,0.45),transparent_60%),radial-gradient(ellipse_at_50%_90%,rgba(120,170,255,0.18),transparent_55%)]" />
 
@@ -140,13 +145,25 @@ function Architecture() {
               {[
                 { title: "T_travel", body: "Grid distance calculated via Manhattan heuristics." },
                 { title: "T_queue", body: "Dynamic capacity tracking via APQ-h arrays." },
-                { title: "R_deterioration", body: "Exponential time-decay penalty for critical triage levels." },
+                {
+                  title: "R_deterioration",
+                  body: "Exponential time-decay penalty for critical triage levels.",
+                },
               ].map((f) => (
-                <div key={f.title} className="grid grid-cols-[180px_1fr] md:grid-cols-[220px_1fr] gap-6 items-baseline">
-                  <dt className="font-mono font-semibold text-base md:text-lg" style={{ color: "#FFFFFF", opacity: 1 }}>
+                <div
+                  key={f.title}
+                  className="grid grid-cols-[180px_1fr] md:grid-cols-[220px_1fr] gap-6 items-baseline"
+                >
+                  <dt
+                    className="font-mono font-semibold text-base md:text-lg"
+                    style={{ color: "#FFFFFF", opacity: 1 }}
+                  >
                     {f.title}
                   </dt>
-                  <dd className="text-sm md:text-base leading-relaxed" style={{ color: "#FFFFFF", opacity: 1 }}>
+                  <dd
+                    className="text-sm md:text-base leading-relaxed"
+                    style={{ color: "#FFFFFF", opacity: 1 }}
+                  >
                     {f.body}
                   </dd>
                 </div>
@@ -155,7 +172,6 @@ function Architecture() {
           </Reveal>
         </div>
       </section>
-
 
       {/* SECTION C — Stack Badges */}
       <section className="bg-arctic-soft">

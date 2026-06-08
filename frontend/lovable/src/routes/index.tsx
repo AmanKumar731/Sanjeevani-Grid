@@ -4,13 +4,26 @@ import { MetricCounter } from "@/components/MetricCounter";
 import { AuraAssistant } from "@/components/AuraAssistant";
 import { Reveal } from "@/components/Reveal";
 import { motion } from "framer-motion";
-import { ArrowRight, Brain, Compass, ListOrdered, ShieldCheck, Cpu, Network, HeartPulse } from "lucide-react";
+import {
+  ArrowRight,
+  Brain,
+  Compass,
+  ListOrdered,
+  ShieldCheck,
+  Cpu,
+  Network,
+  HeartPulse,
+} from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "PulseGrid, Real Time Medical Network" },
-      { name: "description", content: "Cinematic emergency coordination dashboard for ambulances, triage and hospital capacity." },
+      {
+        name: "description",
+        content:
+          "Cinematic emergency coordination dashboard for ambulances, triage and hospital capacity.",
+      },
     ],
   }),
   component: Home,
@@ -36,7 +49,8 @@ function Home() {
               coordinated in real time.
             </h1>
             <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-lg">
-              PulseGrid is a command surface for ambulance dispatch, triage flow and hospital capacity, built for the seconds that matter.
+              PulseGrid is a command surface for ambulance dispatch, triage flow and hospital
+              capacity, built for the seconds that matter.
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-3">
@@ -57,7 +71,13 @@ function Home() {
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3">
               <MetricCounter label="Total Beds" value={1284} accent="Network wide" delay={0.1} />
               <MetricCounter label="Active Ambulances" value={47} accent="Dispatched" delay={0.2} />
-              <MetricCounter label="Network Load" value={73} suffix="%" accent="Real time" delay={0.3} />
+              <MetricCounter
+                label="Network Load"
+                value={73}
+                suffix="%"
+                accent="Real time"
+                delay={0.3}
+              />
             </div>
           </motion.div>
 
@@ -73,7 +93,9 @@ function Home() {
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   Live ECG · Network Pulse
                 </div>
-                <span className="text-[10px] uppercase tracking-wider text-[color:var(--tech-blue-deep)] font-semibold">72 BPM</span>
+                <span className="text-[10px] uppercase tracking-wider text-[color:var(--tech-blue-deep)] font-semibold">
+                  72 BPM
+                </span>
               </div>
               <HeartbeatWave />
             </div>
@@ -96,7 +118,11 @@ function Home() {
         <Reveal delay={0.1}>
           <div className="mt-8 glass-card rounded-2xl p-8 md:p-10 hover:-translate-y-1 hover:shadow-lg">
             <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
-              In emergency medicine, time is tissue. Every second an ambulance spends idling or a patient spends waiting reduces their chance of survival. PulseGrid eliminates the guesswork in metropolitan emergency response. We process patient vitals, predict hospital congestion, and dynamically route ambulances to the exact bed that is opening up. It is not just dispatching. It is real time life saving choreography.
+              In emergency medicine, time is tissue. Every second an ambulance spends idling or a
+              patient spends waiting reduces their chance of survival. PulseGrid eliminates the
+              guesswork in metropolitan emergency response. We process patient vitals, predict
+              hospital congestion, and dynamically route ambulances to the exact bed that is opening
+              up. It is not just dispatching. It is real time life saving choreography.
             </p>
           </div>
         </Reveal>
@@ -106,12 +132,15 @@ function Home() {
       <section id="how-it-works" className="mx-auto max-w-7xl px-6 py-20 scroll-mt-24">
         <Reveal>
           <div className="max-w-2xl">
-            <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">How it works</div>
+            <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+              How it works
+            </div>
             <h2 className="mt-2 font-display text-4xl md:text-5xl font-semibold tracking-tight">
               Three steps to the right bed.
             </h2>
             <p className="mt-3 text-muted-foreground max-w-xl">
-              From the first 112 call to the moment the patient is wheeled into the right ward, PulseGrid choreographs the network.
+              From the first 112 call to the moment the patient is wheeled into the right ward,
+              PulseGrid choreographs the network.
             </p>
           </div>
         </Reveal>
@@ -144,7 +173,9 @@ function Home() {
                   <div className="grid place-items-center w-11 h-11 rounded-xl bg-arctic-soft border border-[color:var(--tech-blue)]/20">
                     <s.Icon className="w-5 h-5 text-[color:var(--tech-blue-deep)]" />
                   </div>
-                  <span className="font-display text-3xl font-semibold text-[color:var(--tech-blue)]/30 tabular-nums">{s.n}</span>
+                  <span className="font-display text-3xl font-semibold text-[color:var(--tech-blue)]/30 tabular-nums">
+                    {s.n}
+                  </span>
                 </div>
                 <h3 className="mt-5 font-display text-xl font-semibold">{s.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.body}</p>
@@ -162,13 +193,18 @@ function Home() {
         <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <Reveal className="lg:col-span-7">
-              <div className="text-[11px] uppercase tracking-[0.28em] text-[#7FB3FF]">Premium Accountability</div>
+              <div className="text-[11px] uppercase tracking-[0.28em] text-[#7FB3FF]">
+                Premium Accountability
+              </div>
               <h2 className="mt-3 font-display text-4xl md:text-5xl xl:text-6xl font-semibold tracking-tight leading-[1.05]">
-                An event sourced spine for<br />
+                An event sourced spine for
+                <br />
                 <span className="text-[#7FB3FF]">every clinical decision.</span>
               </h2>
               <p className="mt-5 text-white/70 max-w-xl text-base md:text-lg leading-relaxed">
-                Every dispatch, every reroute, every priority change is written once and replayable. PulseGrid runs on an MQTT and WebSocket spine with a deterministic triage engine, so what your team sees is what actually happened.
+                Every dispatch, every reroute, every priority change is written once and replayable.
+                PulseGrid runs on an MQTT and WebSocket spine with a deterministic triage engine, so
+                what your team sees is what actually happened.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -189,9 +225,21 @@ function Home() {
 
             <div className="lg:col-span-5 grid grid-cols-1 gap-3">
               {[
-                { Icon: ShieldCheck, title: "Immutable audit trail", body: "Every event is hashed and append only." },
-                { Icon: Cpu, title: "Sub second triage", body: "Deterministic scoring with explainable outputs." },
-                { Icon: Network, title: "Resilient mesh", body: "Auto failover to mock feed if a node drops." },
+                {
+                  Icon: ShieldCheck,
+                  title: "Immutable audit trail",
+                  body: "Every event is hashed and append only.",
+                },
+                {
+                  Icon: Cpu,
+                  title: "Sub second triage",
+                  body: "Deterministic scoring with explainable outputs.",
+                },
+                {
+                  Icon: Network,
+                  title: "Resilient mesh",
+                  body: "Auto failover to mock feed if a node drops.",
+                },
               ].map((f, i) => (
                 <Reveal key={f.title} delay={i * 0.08}>
                   <div className="flex items-start gap-4 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur p-4 hover:-translate-y-0.5 hover:bg-white/[0.06] hover:border-white/20">

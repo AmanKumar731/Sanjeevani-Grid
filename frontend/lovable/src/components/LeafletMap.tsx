@@ -30,13 +30,7 @@ const AMBULANCE_SVG = `
   <path d="M8 8v4"/><path d="M9 18h6"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>
 </svg>`;
 
-export function LeafletMap({
-  hospitals,
-  routes,
-}: {
-  hospitals: Hospital[];
-  routes: RouteEvent[];
-}) {
+export function LeafletMap({ hospitals, routes }: { hospitals: Hospital[]; routes: RouteEvent[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LType.Map | null>(null);
   const LRef = useRef<typeof LType | null>(null);
@@ -57,7 +51,9 @@ export function LeafletMap({
         zoomControl: false,
         attributionControl: false,
       });
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", { maxZoom: 19 }).addTo(map);
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+        maxZoom: 19,
+      }).addTo(map);
       L.control.zoom({ position: "bottomright" }).addTo(map);
       hospitalLayer.current = L.layerGroup().addTo(map);
       routeLayer.current = L.layerGroup().addTo(map);
@@ -106,7 +102,7 @@ export function LeafletMap({
            <div style="font-size:12px;font-weight:600;color:#001A40;line-height:1.25;">${h.name}</div>
            <div style="font-size:11px;font-weight:500;color:#475569;margin-top:3px;">${h.queue.length}/${h.capacity} beds</div>
          </div>`,
-        { direction: "top", offset: [0, -18], opacity: 1 }
+        { direction: "top", offset: [0, -18], opacity: 1 },
       );
       hospitalLayer.current!.addLayer(marker);
     });
@@ -120,8 +116,17 @@ export function LeafletMap({
       const h = hospitals.find((x) => x.id === r.hospitalId);
       if (!h) return;
       const line = L.polyline(
-        [[r.fromLat, r.fromLng], [h.lat, h.lng]],
-        { color: "#0050D8", weight: 2.5, opacity: 0.85, dashArray: "6 8", className: "pg-route-line" }
+        [
+          [r.fromLat, r.fromLng],
+          [h.lat, h.lng],
+        ],
+        {
+          color: "#0050D8",
+          weight: 2.5,
+          opacity: 0.85,
+          dashArray: "6 8",
+          className: "pg-route-line",
+        },
       );
       routeLayer.current!.addLayer(line);
       const ambulanceIcon = L.divIcon({
@@ -140,8 +145,12 @@ export function LeafletMap({
     });
   };
 
-  useEffect(() => { paintHospitals(); /* eslint-disable-next-line */ }, [hospitals]);
-  useEffect(() => { paintRoutes(); /* eslint-disable-next-line */ }, [routes, hospitals]);
+  useEffect(() => {
+    paintHospitals(); /* eslint-disable-next-line */
+  }, [hospitals]);
+  useEffect(() => {
+    paintRoutes(); /* eslint-disable-next-line */
+  }, [routes, hospitals]);
 
   return (
     <>

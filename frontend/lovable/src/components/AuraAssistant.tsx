@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Send, Sparkles, Volume2, VolumeX, X } from "lucide-react";
+import { askAura } from "@/lib/api";
 
 export function AuraAssistant() {
   const [open, setOpen] = useState(false);
@@ -11,7 +12,9 @@ export function AuraAssistant() {
   ]);
   const endRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, open]);
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, open]);
 
   const speak = (msg: string) => {
     if (muted || typeof window === "undefined" || !("speechSynthesis" in window)) return;
@@ -20,16 +23,27 @@ export function AuraAssistant() {
     window.speechSynthesis.speak(u);
   };
 
-  const send = () => {
+  const send = async () => {
     if (!text.trim()) return;
     const userMsg = text.trim();
-    setMessages((m) => [...m, { role: "user", text: userMsg }]);
+    const nextMessages = [...messages, { role: "user" as const, text: userMsg }];
+    setMessages(nextMessages);
     setText("");
-    setTimeout(() => {
-      const reply = `Acknowledged: "${userMsg}". Rerouting to nearest available unit.`;
+
+    try {
+      const reply = await askAura(
+        nextMessages.map((message) => ({
+          role: message.role === "bot" ? "assistant" : "user",
+          content: message.text,
+        })),
+      );
       setMessages((m) => [...m, { role: "bot", text: reply }]);
       speak(reply);
-    }, 550);
+    } catch {
+      const reply = `Acknowledged: "${userMsg}". Aura is in offline demo mode, but the command dashboard can still monitor grid state and simulate intakes.`;
+      setMessages((m) => [...m, { role: "bot", text: reply }]);
+      speak(reply);
+    }
   };
 
   return (
@@ -50,10 +64,22 @@ export function AuraAssistant() {
                 <span className="text-[11px] uppercase tracking-wider font-semibold">Ask Aura</span>
               </div>
               <div className="flex items-center gap-1">
-                <button onClick={() => setMuted((m) => !m)} className="p-1 rounded-md hover:bg-secondary" aria-label="Toggle voice">
-                  {muted ? <VolumeX className="w-4 h-4 text-muted-foreground" /> : <Volume2 className="w-4 h-4 text-[color:var(--tech-blue-deep)]" />}
+                <button
+                  onClick={() => setMuted((m) => !m)}
+                  className="p-1 rounded-md hover:bg-secondary"
+                  aria-label="Toggle voice"
+                >
+                  {muted ? (
+                    <VolumeX className="w-4 h-4 text-muted-foreground" />
+                  ) : (
+                    <Volume2 className="w-4 h-4 text-[color:var(--tech-blue-deep)]" />
+                  )}
                 </button>
-                <button onClick={() => setOpen(false)} className="p-1 rounded-md hover:bg-secondary" aria-label="Close">
+                <button
+                  onClick={() => setOpen(false)}
+                  className="p-1 rounded-md hover:bg-secondary"
+                  aria-label="Close"
+                >
                   <X className="w-4 h-4 text-muted-foreground" />
                 </button>
               </div>
@@ -63,7 +89,9 @@ export function AuraAssistant() {
                 <div
                   key={i}
                   className={`max-w-[85%] rounded-lg px-3 py-1.5 text-[13px] leading-snug ${
-                    m.role === "user" ? "ml-auto bg-arctic text-white" : "bg-secondary text-foreground"
+                    m.role === "user"
+                      ? "ml-auto bg-arctic text-white"
+                      : "bg-secondary text-foreground"
                   }`}
                 >
                   {m.text}
@@ -79,7 +107,10 @@ export function AuraAssistant() {
                 placeholder="Ask Aura…"
                 className="flex-1 bg-transparent text-sm px-2 py-1.5 outline-none placeholder:text-muted-foreground/70"
               />
-              <button onClick={send} className="p-1.5 rounded-md bg-arctic text-white hover:opacity-90">
+              <button
+                onClick={send}
+                className="p-1.5 rounded-md bg-arctic text-white hover:opacity-90"
+              >
                 <Send className="w-3.5 h-3.5" />
               </button>
             </div>

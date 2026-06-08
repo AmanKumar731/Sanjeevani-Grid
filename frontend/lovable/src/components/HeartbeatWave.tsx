@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 import { Ambulance, Building2, BedDouble } from "lucide-react";
 
 // Smooth ECG-style path with three notable points where we drop icons
-const PATH = "M0,140 L120,140 L150,140 L170,90 L195,180 L220,60 L250,140 L420,140 L450,140 L480,200 L520,40 L560,180 L590,140 L760,140 L790,140 L820,110 L850,170 L880,140 L1100,140 L1200,140";
+const PATH =
+  "M0,140 L120,140 L150,140 L170,90 L195,180 L220,60 L250,140 L420,140 L450,140 L480,200 L520,40 L560,180 L590,140 L760,140 L790,140 L820,110 L850,170 L880,140 L1100,140 L1200,140";
 
 const ICONS = [
   { x: 220, y: 60, Icon: Ambulance, label: "Dispatch" },

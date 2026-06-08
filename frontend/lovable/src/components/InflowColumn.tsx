@@ -3,9 +3,23 @@ import { Patient } from "@/lib/mockData";
 import { UserRound } from "lucide-react";
 
 function triageStyles(level: number) {
-  if (level >= 4) return { dot: "bg-[color:var(--urgent)]", chip: "bg-[color:var(--urgent)]/10 text-[color:var(--urgent)] border-[color:var(--urgent)]/30", label: "Urgent" };
-  if (level === 3) return { dot: "bg-[color:var(--warn)]", chip: "bg-[color:var(--warn)]/10 text-[color:var(--warn)] border-[color:var(--warn)]/30", label: "Watch" };
-  return { dot: "bg-[color:var(--tech-blue-deep)]", chip: "bg-[color:var(--ice)] text-[color:var(--tech-blue-deep)] border-[color:var(--tech-blue)]/30", label: "Standard" };
+  if (level >= 4)
+    return {
+      dot: "bg-[color:var(--urgent)]",
+      chip: "bg-[color:var(--urgent)]/10 text-[color:var(--urgent)] border-[color:var(--urgent)]/30",
+      label: "Urgent",
+    };
+  if (level === 3)
+    return {
+      dot: "bg-[color:var(--warn)]",
+      chip: "bg-[color:var(--warn)]/10 text-[color:var(--warn)] border-[color:var(--warn)]/30",
+      label: "Watch",
+    };
+  return {
+    dot: "bg-[color:var(--tech-blue-deep)]",
+    chip: "bg-[color:var(--ice)] text-[color:var(--tech-blue-deep)] border-[color:var(--tech-blue)]/30",
+    label: "Standard",
+  };
 }
 
 export function InflowColumn({ patients }: { patients: Patient[] }) {
@@ -38,12 +52,20 @@ export function InflowColumn({ patients }: { patients: Patient[] }) {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
                       <span className="font-medium text-sm truncate">{p.name}</span>
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[10px] font-semibold uppercase tracking-wider ${t.chip}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${t.dot}`} />
-                        L{p.triage} · {t.label}
+                      <span
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[10px] font-semibold uppercase tracking-wider ${t.chip}`}
+                      >
+                        <span className={`w-1.5 h-1.5 rounded-full ${t.dot}`} />L{p.triage} ·{" "}
+                        {t.label}
                       </span>
                     </div>
                     <p className="text-xs text-muted-foreground mt-0.5 truncate">{p.symptom}</p>
+                    {p.status && (
+                      <p className="text-[10px] text-muted-foreground/80 mt-1 uppercase tracking-wider">
+                        {p.status.replace("_", " ")}{" "}
+                        {p.assignedHospitalId ? `· ${p.assignedHospitalId}` : ""}
+                      </p>
+                    )}
                   </div>
                 </div>
               </motion.article>

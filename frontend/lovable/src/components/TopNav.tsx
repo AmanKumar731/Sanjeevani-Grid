@@ -28,16 +28,28 @@ export function TopNav() {
           </div>
           <div className="leading-none">
             <div className="font-display font-semibold text-[15px] tracking-tight">PulseGrid</div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Medical Command</div>
+            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              Medical Command
+            </div>
           </div>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
-          <Link to="/" className={linkCls} activeOptions={{ exact: true }}>Home</Link>
-          <a href="/#pitch" onClick={scrollTo("pitch")} className={linkCls}>Pitch</a>
-          <a href="/#how-it-works" onClick={scrollTo("how-it-works")} className={linkCls}>How It Works</a>
-          <Link to="/live" className={linkCls} activeOptions={{ exact: true }}>Live Grid</Link>
-          <Link to="/architecture" className={linkCls} activeOptions={{ exact: true }}>Architecture</Link>
+          <Link to="/" className={linkCls} activeOptions={{ exact: true }}>
+            Home
+          </Link>
+          <a href="/#pitch" onClick={scrollTo("pitch")} className={linkCls}>
+            Pitch
+          </a>
+          <a href="/#how-it-works" onClick={scrollTo("how-it-works")} className={linkCls}>
+            How It Works
+          </a>
+          <Link to="/live" className={linkCls} activeOptions={{ exact: true }}>
+            Live Grid
+          </Link>
+          <Link to="/architecture" className={linkCls} activeOptions={{ exact: true }}>
+            Architecture
+          </Link>
         </nav>
 
         <a
