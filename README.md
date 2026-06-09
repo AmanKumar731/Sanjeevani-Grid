@@ -5,7 +5,6 @@
 It coordinates patient triage, ambulance routing, hospital capacity, and dynamic priority queues into one live operational view. The goal is to reduce emergency response delays by helping operators see where patients are, how critical they are, which hospitals have capacity, and where each patient should be routed.
 
 > Built by **Thobeka Nkosi** 🇿🇦
-> Hackathon prototype turned into a completed and documented GitHub portfolio project.
 
 ---
 
@@ -92,43 +91,43 @@ The frontend was originally mocked in Lovable, then integrated with a Python Fas
 
 ### Home Page
 
-![PulseGrid Home](frontend/lovable/public/screenshots/pulsegrid-home.png)
+![PulseGrid Home](frontend/lovable/public/screenshots/home-page.png)
 
 ---
 
 ### Pitch Section
 
-![PulseGrid Pitch](frontend/lovable/public/screenshots/pulsegrid-pitch.png)
+![PulseGrid Pitch](frontend/lovable/public/screenshots/pitch.png)
 
 ---
 
 ### How It Works
 
-![PulseGrid How It Works](frontend/lovable/public/screenshots/pulsegrid-how-it-works.png)
+![PulseGrid How It Works](frontend/lovable/public/screenshots/how-it-works.png)
 
 ---
 
 ### Live Grid – Backend Connected
 
-![PulseGrid Live Grid Backend](frontend/lovable/public/screenshots/pulsegrid-live-grid-backend.png)
+![PulseGrid Live Grid Backend](frontend/lovable/public/screenshots/live-grid.png)
 
 ---
 
 ### Live Grid – Simulation Running
 
-![PulseGrid Simulation](frontend/lovable/public/screenshots/pulsegrid-live-grid-simulation.png)
+![PulseGrid Simulation](frontend/lovable/public/screenshots/simulation.png)
 
 ---
 
 ### Architecture
 
-![PulseGrid Architecture](frontend/lovable/public/screenshots/pulsegrid-architecture.png)
+![PulseGrid Architecture](frontend/lovable/public/screenshots/architecture.png)
 
 ---
 
 ### Aura Assistant
 
-![PulseGrid Aura Assistant](frontend/lovable/public/screenshots/pulsegrid-aura-assistant.png)
+![PulseGrid Aura Assistant](frontend/lovable/public/screenshots/aura1.png)  ![PulseGrid Aura Assistant](frontend/lovable/public/screenshots/aura2.png)
 
 ---
 
