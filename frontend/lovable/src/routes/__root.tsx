@@ -55,21 +55,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "PulseGrid — Real-Time Medical Network Command" },
+      { title: "Sanjeevani Grid — Real-Time Emergency Medical Command (Delhi NCR)" },
       {
         name: "description",
-        content: "PulseGrid orchestrates ambulances, triage and hospital capacity in real time.",
+        content: "Sanjeevani Grid orchestrates ambulances, triage and Delhi hospital capacity in real time.",
       },
-      { property: "og:title", content: "PulseGrid — Real-Time Medical Network Command" },
+      { property: "og:title", content: "Sanjeevani Grid — Real-Time Emergency Medical Command (Delhi NCR)" },
       {
         property: "og:description",
-        content: "PulseGrid orchestrates ambulances, triage and hospital capacity in real time.",
+        content: "Sanjeevani Grid orchestrates ambulances, triage and Delhi hospital capacity in real time.",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:title", content: "PulseGrid — Real-Time Medical Network Command" },
+      { name: "twitter:title", content: "Sanjeevani Grid — Real-Time Emergency Medical Command (Delhi NCR)" },
       {
         name: "twitter:description",
-        content: "PulseGrid orchestrates ambulances, triage and hospital capacity in real time.",
+        content: "Sanjeevani Grid orchestrates ambulances, triage and Delhi hospital capacity in real time.",
       },
       {
         property: "og:image",
@@ -113,6 +113,9 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { Toaster } from "@/components/ui/sonner";
+import { AuraAssistant } from "@/components/AuraAssistant";
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
@@ -121,6 +124,8 @@ function RootComponent() {
         <TopNav />
         <Outlet />
         <Footer />
+        <Toaster position="top-right" richColors />
+        <AuraAssistant />
       </div>
     </QueryClientProvider>
   );

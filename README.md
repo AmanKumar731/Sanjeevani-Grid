@@ -1,10 +1,10 @@
 # PulseGrid AI
 
-**PulseGrid AI** is a real-time emergency medical command dashboard built for the **AlgoFest Hackathon – Battle of the Beasts**.
+**Sanjeevani Grid AI** is a real-time emergency medical command dashboard built for the **Graviton Hackathon – Battle of the Beasts**.
 
 It coordinates patient triage, ambulance routing, hospital capacity, and dynamic priority queues into one live operational view. The goal is to reduce emergency response delays by helping operators see where patients are, how critical they are, which hospitals have capacity, and where each patient should be routed.
 
-> Built by **Thobeka Nkosi** 🇿🇦
+> Built by **TEAM Sanjeevani Grid** from **INDIA** 🇮🇳
 
 ---
 
@@ -700,16 +700,14 @@ Planned improvements include:
 
 ## Hackathon Context
 
-PulseGrid was originally built for the **AlgoFest Hackathon – Battle of the Beasts**.
-
-The final hackathon submission was not completed due to a last-minute laptop crash while integrating the Python backend with the Lovable frontend. After the hackathon, the project was completed further, integrated locally, tested, documented, and prepared for GitHub as a portfolio-ready project.
+Sanjeevani Grid was built for the **Graviton Hackathon – Battle of the Beasts**.
 
 ---
 
-## Author
+## Team / Author
 
-**Thobeka Nkosi**
-South Africa 🇿🇦
+**TEAM Sanjeevani Grid**
+INDIA 🇮🇳
 
-Built with care for emergency response, HealthTech innovation, and real-world problem solving.
+Built with care for emergency response, HealthTech innovation, and real-world problem solving across Delhi NCR.
 

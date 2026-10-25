@@ -15,8 +15,8 @@ import {
 export const Route = createFileRoute("/architecture")({
   head: () => ({
     meta: [
-      { title: "Architecture, PulseGrid" },
-      { name: "description", content: "How PulseGrid's real time stack is wired together." },
+      { title: "Architecture — Sanjeevani Grid" },
+      { name: "description", content: "How Sanjeevani Grid's real-time emergency healthcare stack is wired together." },
     ],
   }),
   component: Architecture,

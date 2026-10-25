@@ -27,9 +27,16 @@ export function TopNav() {
             <span className="absolute inset-0 rounded-xl ring-1 ring-inset ring-white/30" />
           </div>
           <div className="leading-none">
-            <div className="font-display font-semibold text-[15px] tracking-tight">PulseGrid</div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Medical Command
+            <div className="flex items-center gap-1.5">
+              <div className="font-display font-bold text-[15px] tracking-tight text-foreground">
+                Sanjeevani Grid
+              </div>
+              <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                संजीवनी
+              </span>
+            </div>
+            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mt-0.5">
+              Delhi NCR Medical Command
             </div>
           </div>
         </Link>

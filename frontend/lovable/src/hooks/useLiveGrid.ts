@@ -4,6 +4,8 @@ import {
   mapBackendHospital,
   mapBackendPatient,
   simulatePatientIntake,
+  intakePatient,
+  IntakePayload,
   WS_URL,
 } from "@/lib/api";
 import {
@@ -107,22 +109,55 @@ export function useLiveGrid() {
     );
   }, []);
 
-  const simulateIntake = useCallback(async () => {
+  const simulateIntake = useCallback(async (): Promise<Patient | null> => {
     setIsSimulating(true);
     try {
       const backendPatient = await simulatePatientIntake();
       const patient = mapBackendPatient(backendPatient);
       pushPatient(patient);
       await syncGrid();
+      return patient;
     } catch (error) {
       console.error("PulseGrid simulation failed", error);
       setConn("mock");
-      pushPatient(randomPatient());
+      const fallback = randomPatient();
+      pushPatient(fallback);
       reshuffleMock();
+      return fallback;
     } finally {
       setIsSimulating(false);
     }
   }, [pushPatient, reshuffleMock, syncGrid]);
+
+  const dispatchCustomIntake = useCallback(
+    async (payload: IntakePayload): Promise<Patient | null> => {
+      setIsSimulating(true);
+      try {
+        const backendPatient = await intakePatient(payload);
+        const patient = mapBackendPatient(backendPatient);
+        pushPatient(patient);
+        await syncGrid();
+        return patient;
+      } catch (error) {
+        console.error("PulseGrid custom intake failed", error);
+        setConn("mock");
+        const fallback: Patient = {
+          id: crypto.randomUUID(),
+          name: payload.name,
+          symptom: payload.primary_symptom,
+          triage: 4,
+          arrivedAt: Date.now(),
+          age: payload.age,
+        };
+        pushPatient(fallback);
+        reshuffleMock();
+        return fallback;
+      } finally {
+        setIsSimulating(false);
+      }
+    },
+    [pushPatient, reshuffleMock, syncGrid],
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -209,5 +244,13 @@ export function useLiveGrid() {
     return () => clearInterval(timer);
   }, []);
 
-  return { patients, hospitals, routes, conn, simulateIntake, isSimulating };
+  return {
+    patients,
+    hospitals,
+    routes,
+    conn,
+    simulateIntake,
+    dispatchCustomIntake,
+    isSimulating,
+  };
 }

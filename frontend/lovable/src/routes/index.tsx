@@ -18,7 +18,7 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "PulseGrid, Real Time Medical Network" },
+      { title: "Sanjeevani Grid — Real Time Emergency Medical Network" },
       {
         name: "description",
         content:
@@ -42,15 +42,15 @@ function Home() {
           >
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-card/80 backdrop-blur text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
               <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--tech-blue-deep)]" />
-              Network Online, Johannesburg
+              Network Online, Delhi NCR
             </span>
             <h1 className="mt-6 font-display text-5xl md:text-6xl xl:text-7xl font-semibold tracking-tight leading-[1.02]">
               The pulse of every <span className="text-arctic">emergency</span>,<br />
               coordinated in real time.
             </h1>
             <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-lg">
-              PulseGrid is a command surface for ambulance dispatch, triage flow and hospital
-              capacity, built for the seconds that matter.
+              Sanjeevani Grid is a command surface for ambulance dispatch, triage flow and hospital
+              capacity across Delhi NCR, built for the seconds that matter.
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-3">
@@ -119,7 +119,7 @@ function Home() {
           <div className="mt-8 glass-card rounded-2xl p-8 md:p-10 hover:-translate-y-1 hover:shadow-lg">
             <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
               In emergency medicine, time is tissue. Every second an ambulance spends idling or a
-              patient spends waiting reduces their chance of survival. PulseGrid eliminates the
+              patient spends waiting reduces their chance of survival. Sanjeevani Grid eliminates the
               guesswork in metropolitan emergency response. We process patient vitals, predict
               hospital congestion, and dynamically route ambulances to the exact bed that is opening
               up. It is not just dispatching. It is real time life saving choreography.
@@ -139,8 +139,8 @@ function Home() {
               Three steps to the right bed.
             </h2>
             <p className="mt-3 text-muted-foreground max-w-xl">
-              From the first 112 call to the moment the patient is wheeled into the right ward,
-              PulseGrid choreographs the network.
+              From the first 108/112 call to the moment the patient is wheeled into the right ward,
+              Sanjeevani Grid choreographs the network.
             </p>
           </div>
         </Reveal>
@@ -203,7 +203,7 @@ function Home() {
               </h2>
               <p className="mt-5 text-white/70 max-w-xl text-base md:text-lg leading-relaxed">
                 Every dispatch, every reroute, every priority change is written once and replayable.
-                PulseGrid runs on an MQTT and WebSocket spine with a deterministic triage engine, so
+                Sanjeevani Grid runs on an MQTT and WebSocket spine with a deterministic triage engine, so
                 what your team sees is what actually happened.
               </p>
 
@@ -257,8 +257,6 @@ function Home() {
           </div>
         </div>
       </section>
-
-      <AuraAssistant />
     </main>
   );
 }

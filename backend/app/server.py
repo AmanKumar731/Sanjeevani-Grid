@@ -15,6 +15,7 @@ from app.core.queue_manager import sort_patient_queue
 from app.core.routing import find_best_hospital
 from app.core.triage_logic import rule_based_explainable_inference
 from app.models.schemas import ChatRequest, Hospital, Patient, PatientCreate
+from app.core.aura_brain import build_aura_system_prompt, generate_aura_expert_response
 
 load_dotenv()
 
@@ -53,73 +54,155 @@ manager = ConnectionManager()
 
 
 # ==========================================
-# IN-MEMORY DATABASE (The Grid)
+# IN-MEMORY DATABASE (The Grid - Delhi NCR)
 # ==========================================
 db_hospitals: Dict[str, Hospital] = {
+    # --- GOVERNMENT / PUBLIC ACADEMIC HOSPITALS ---
     "H-1": Hospital(
         id="H-1",
-        name="Chris Hani Baragwanath Academic Hospital",
+        name="AIIMS New Delhi (All India Institute of Medical Sciences)",
         kind="public",
-        location_x=8.0,
+        location_x=14.0,
         location_y=18.0,
-        lat=-26.2614,
-        lng=27.9389,
-        total_beds=32,
-        available_beds=32,
+        lat=28.5672,
+        lng=77.2100,
+        total_beds=50,
+        available_beds=48,
     ),
     "H-2": Hospital(
         id="H-2",
-        name="Charlotte Maxeke Johannesburg Academic Hospital",
+        name="Safdarjung Hospital & VMMC",
         kind="public",
-        location_x=18.0,
-        location_y=32.0,
-        lat=-26.1773,
-        lng=28.0451,
-        total_beds=26,
-        available_beds=26,
+        location_x=13.5,
+        location_y=18.5,
+        lat=28.5700,
+        lng=77.2065,
+        total_beds=44,
+        available_beds=40,
     ),
     "H-3": Hospital(
         id="H-3",
-        name="Helen Joseph Hospital",
+        name="Dr. Ram Manohar Lohia (RML) Hospital",
         kind="public",
-        location_x=15.0,
-        location_y=29.0,
-        lat=-26.1745,
-        lng=28.0107,
-        total_beds=20,
-        available_beds=20,
+        location_x=13.0,
+        location_y=24.0,
+        lat=28.6247,
+        lng=77.2008,
+        total_beds=36,
+        available_beds=32,
     ),
     "H-4": Hospital(
         id="H-4",
-        name="Rahima Moosa Mother and Child Hospital",
+        name="Lok Nayak Hospital (LNJP / MAMC)",
         kind="public",
-        location_x=14.0,
-        location_y=27.0,
-        lat=-26.1791,
-        lng=27.9942,
-        total_beds=18,
-        available_beds=18,
+        location_x=17.0,
+        location_y=25.5,
+        lat=28.6369,
+        lng=77.2405,
+        total_beds=38,
+        available_beds=35,
     ),
     "H-5": Hospital(
         id="H-5",
-        name="Netcare Milpark Hospital",
-        kind="private",
-        location_x=16.0,
+        name="Guru Teg Bahadur (GTB) Hospital",
+        kind="public",
+        location_x=24.0,
         location_y=30.0,
-        lat=-26.1820,
-        lng=28.0241,
-        total_beds=16,
-        available_beds=16,
+        lat=28.6833,
+        lng=77.3117,
+        total_beds=34,
+        available_beds=30,
     ),
+
+    # --- PRIVATE SUPER-SPECIALTY & TRAUMA CENTERS ---
     "H-6": Hospital(
         id="H-6",
-        name="Mediclinic Morningside",
+        name="Max Super Speciality Hospital, Saket",
         kind="private",
-        location_x=24.0,
-        location_y=42.0,
-        lat=-26.0726,
-        lng=28.0561,
-        total_beds=16,
+        location_x=14.5,
+        location_y=14.0,
+        lat=28.5276,
+        lng=77.2120,
+        total_beds=28,
+        available_beds=26,
+    ),
+    "H-7": Hospital(
+        id="H-7",
+        name="Fortis Escorts Heart Institute, Okhla",
+        kind="private",
+        location_x=21.0,
+        location_y=17.5,
+        lat=28.5606,
+        lng=77.2762,
+        total_beds=24,
+        available_beds=22,
+    ),
+    "H-8": Hospital(
+        id="H-8",
+        name="Indraprastha Apollo Hospital, Sarita Vihar",
+        kind="private",
+        location_x=21.5,
+        location_y=15.5,
+        lat=28.5414,
+        lng=77.2831,
+        total_beds=30,
+        available_beds=28,
+    ),
+    "H-9": Hospital(
+        id="H-9",
+        name="Sir Ganga Ram Hospital, Rajinder Nagar",
+        kind="private",
+        location_x=12.0,
+        location_y=25.5,
+        lat=28.6385,
+        lng=77.1895,
+        total_beds=26,
+        available_beds=24,
+    ),
+
+    # --- LOCAL / COMMUNITY & MUNICIPAL HOSPITALS ---
+    "H-10": Hospital(
+        id="H-10",
+        name="Deen Dayal Upadhyay (DDU) Hospital, Hari Nagar",
+        kind="local",
+        location_x=4.5,
+        location_y=24.5,
+        lat=28.6280,
+        lng=77.1122,
+        total_beds=22,
+        available_beds=20,
+    ),
+    "H-11": Hospital(
+        id="H-11",
+        name="Sanjay Gandhi Memorial Hospital, Mangolpuri",
+        kind="local",
+        location_x=3.0,
+        location_y=31.0,
+        lat=28.6975,
+        lng=77.0945,
+        total_beds=20,
+        available_beds=18,
+    ),
+    "H-12": Hospital(
+        id="H-12",
+        name="Acharya Shree Bhikshu Government Hospital, Moti Nagar",
+        kind="local",
+        location_x=7.5,
+        location_y=27.5,
+        lat=28.6575,
+        lng=77.1425,
+        total_beds=18,
+        available_beds=17,
+    ),
+    "H-13": Hospital(
+        id="H-13",
+        name="Lal Bahadur Shastri Hospital, Khichripur",
+        kind="local",
+        location_x=24.5,
+        location_y=23.5,
+        lat=28.6200,
+        lng=77.3150,
+        total_beds=18,
         available_beds=16,
     ),
 }
@@ -128,24 +211,33 @@ db_patients: Dict[str, Patient] = {}
 hospital_queues: Dict[str, List[Patient]] = {hospital_id: [] for hospital_id in db_hospitals}
 
 DEMO_PATIENTS = [
-    {"name": "A. Morales", "age": 58, "primary_symptom": "severe chest pain and sweating"},
-    {"name": "K. Tanaka", "age": 34, "primary_symptom": "laceration with bleeding"},
-    {"name": "J. Park", "age": 72, "primary_symptom": "slurred speech and numbness"},
-    {"name": "S. Okafor", "age": 5, "primary_symptom": "wheezing and difficulty breathing"},
-    {"name": "L. Romano", "age": 29, "primary_symptom": "broken arm after fall"},
-    {"name": "E. Singh", "age": 41, "primary_symptom": "mild cough and fever"},
-    {"name": "M. Dubois", "age": 63, "primary_symptom": "head injury after collision"},
-    {"name": "R. Hassan", "age": 26, "primary_symptom": "vomiting and dehydration"},
+    {"name": "Rajesh Sharma", "age": 54, "primary_symptom": "severe chest pain radiating to left arm and sweating"},
+    {"name": "Pooja Verma", "age": 29, "primary_symptom": "deep laceration with active bleeding from road collision"},
+    {"name": "Mohammad Arif", "age": 67, "primary_symptom": "sudden slurred speech, facial droop and right-side paralysis"},
+    {"name": "Aarav Gupta", "age": 6, "primary_symptom": "acute asthma attack, wheezing and high respiratory distress"},
+    {"name": "Sunita Devi", "age": 48, "primary_symptom": "compound leg fracture after fall from stairs"},
+    {"name": "Gurpreet Singh", "age": 35, "primary_symptom": "severe head injury and concussion after vehicle collision"},
+    {"name": "Priya Nair", "age": 22, "primary_symptom": "acute anaphylaxis with facial swelling and dyspnea"},
+    {"name": "Amit Patel", "age": 41, "primary_symptom": "acute abdominal pain and persistent vomiting"},
+    {"name": "Deepak Kumar", "age": 59, "primary_symptom": "unconscious with irregular pulse and high fever"},
+    {"name": "Meera Joshi", "age": 31, "primary_symptom": "second-degree burn injuries requiring immediate trauma care"},
 ]
 
 
-def _random_jhb_pickup() -> dict:
+def _random_delhi_pickup() -> dict:
+    lat = 28.6139 + (random.random() - 0.5) * 0.16
+    lng = 77.2090 + (random.random() - 0.5) * 0.20
     return {
-        "pickup_lat": -26.2041 + (random.random() - 0.5) * 0.18,
-        "pickup_lng": 28.0473 + (random.random() - 0.5) * 0.22,
-        "patient_x": random.uniform(6.0, 30.0),
-        "patient_y": random.uniform(16.0, 46.0),
+        "pickup_lat": lat,
+        "pickup_lng": lng,
+        "patient_x": (lng - 77.05) * 100.0,
+        "patient_y": (lat - 28.45) * 100.0,
     }
+
+
+def _random_jhb_pickup() -> dict:
+    """Fallback alias for compatibility."""
+    return _random_delhi_pickup()
 
 
 def _grid_state() -> dict:
@@ -248,7 +340,7 @@ async def lifespan(app: FastAPI):
     task.cancel()
 
 
-app = FastAPI(title="PulseGrid AI API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="Sanjeevani Grid AI API", version="1.0.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS if CORS_ORIGINS else ["http://localhost:5173"],
@@ -263,7 +355,7 @@ app.add_middleware(
 # ==========================================
 @app.get("/")
 def read_root():
-    return {"status": "online", "system": "PulseGrid AI API Engine Active"}
+    return {"status": "online", "system": "Sanjeevani Grid AI API Engine Active"}
 
 
 @app.get("/health")
@@ -294,7 +386,7 @@ async def intake_patient(patient_data: PatientCreate, patient_x: Optional[float]
 
 @app.post("/simulation/intake", response_model=Patient)
 async def simulate_patient_intake():
-    payload = {**random.choice(DEMO_PATIENTS), **_random_jhb_pickup()}
+    payload = {**random.choice(DEMO_PATIENTS), **_random_delhi_pickup()}
     return await _create_patient_record(PatientCreate(**payload))
 
 
@@ -319,41 +411,49 @@ def get_hospital_queue(hospital_id: str):
 # AI CHATBOT ENDPOINT (Powered by OpenRouter)
 # ==========================================
 @app.post("/chat")
-async def chat_with_pulsegrid_ai(request: ChatRequest):
-    """Secure proxy between the React frontend and OpenRouter."""
-    if not OPENROUTER_API_KEY:
-        raise HTTPException(status_code=500, detail="OpenRouter API key is missing from the server environment.")
+async def chat_with_sanjeevani_ai(request: ChatRequest):
+    """
+    Intelligent Aura AI Endpoint.
+    Uses OpenRouter with the comprehensive Delhi live system prompt if API key is valid,
+    or our built-in Delhi Healthcare expert reasoning engine for instant, reliable answers.
+    """
+    user_query = ""
+    for msg in reversed(request.messages):
+        if msg.role == "user":
+            user_query = msg.content
+            break
 
-    system_prompt = {
-        "role": "system",
-        "content": (
-            "You are the PulseGrid AI Command Assistant. You help emergency dispatchers "
-            "monitor hospital congestion, explain triage logic, and verify ambulance routing. "
-            "Be concise, professional, and highly technical."
-        ),
-    }
-    messages = [system_prompt] + [msg.model_dump() for msg in request.messages]
+    # If OpenRouter API key is configured, query the model
+    if OPENROUTER_API_KEY and OPENROUTER_API_KEY.strip() and not OPENROUTER_API_KEY.startswith("your_"):
+        system_prompt = {
+            "role": "system",
+            "content": build_aura_system_prompt(db_hospitals),
+        }
+        messages = [system_prompt] + [msg.model_dump() for msg in request.messages]
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "HTTP-Referer": FRONTEND_ORIGIN,
+            "X-Title": "Sanjeevani Grid AI Delhi NCR",
+            "Content-Type": "application/json",
+        }
 
-    headers = {
-        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "HTTP-Referer": FRONTEND_ORIGIN,
-        "X-Title": "PulseGrid AI",
-        "Content-Type": "application/json",
-    }
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.post(
+                    "https://openrouter.ai/api/v1/chat/completions",
+                    headers=headers,
+                    json={
+                        "model": os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini"),
+                        "messages": messages,
+                    },
+                    timeout=20.0,
+                )
+                if response.status_code == 200:
+                    data = response.json()
+                    return {"reply": data["choices"][0]["message"]["content"]}
+            except Exception:
+                pass
 
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.post(
-                "https://openrouter.ai/api/v1/chat/completions",
-                headers=headers,
-                json={
-                    "model": os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini"),
-                    "messages": messages,
-                },
-                timeout=20.0,
-            )
-            response.raise_for_status()
-            data = response.json()
-            return {"reply": data["choices"][0]["message"]["content"]}
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"OpenRouter connection failed: {str(e)}")
+    # Built-in Delhi Healthcare & PulseGrid Platform Expert Engine
+    reply = generate_aura_expert_response(user_query, db_hospitals, hospital_queues, db_patients)
+    return {"reply": reply}
